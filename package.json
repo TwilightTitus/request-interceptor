@@ -1,0 +1,33 @@
+{
+  "name": "de.titus.request.interceptor",
+  "version": "1.0.0",
+  "description": "this helps you to intercept request at websites for oauth2 or token autentications or even what you need",
+  "main": "./index.js",
+  "scripts": {
+    "build": "webpack --config webpack.prod.js && webpack --config webpack.dev.js",
+    "dev-server": "webpack-dev-server --open --config webpack.dev-server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Frank Schüler",
+  "license": "MIT",
+  "devDependencies": {
+    "clean-webpack-plugin": "^1.0.1",
+    "webpack": "^4.29.0",
+    "webpack-cli": "^3.2.1",
+    "webpack-dev-server": "^3.1.14",
+    "webpack-merge": "^4.2.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TwilightTitus/request-interceptor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/TwilightTitus/request-interceptor/issues"
+  },
+  "homepage": "https://github.com/TwilightTitus/request-interceptor#readme",
+  "dependencies": {},
+  "directories": {
+    "test": "test"
+  }
+}
