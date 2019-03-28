@@ -13,7 +13,8 @@ module.exports = merge(common, {
     devServer : {
         contentBase : './WebContent',
         hot : true,
-        quiet : true
+        quiet : true,
+        port: 80
     },
     output : {
 	    filename : project.name + '.js',

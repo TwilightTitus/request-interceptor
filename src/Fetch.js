@@ -10,14 +10,15 @@ if(typeof fetch === "function"){
 		let data = {
 			method : request.method || "GET",
 			url : aUrl,
+			server: match[1],
 			protocol : (function(match){
-				if(typeof match[1] === "undefined" || match[1] == "//")
+				if(typeof match[2] === "undefined" || match[3] == "//")
 					return document.location.protocol || "http:";
-				else return match[2];			
+				else return match[3];			
 			}).call(null, match),
-			hostname: match[4] || document.location.hostname,
-			port: match[5],
-			query: match[6],
+			hostname: match[4] ||document.location.hostname,
+			port: match[6],
+			query: match[7],
 			async : true
 		};
 		

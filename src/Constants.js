@@ -1,3 +1,3 @@
-const URLSPLITTER = /^(([^:\/]*:)?\/\/)?([^:\/]*)(\:([0-9]*))?(\/.*)?$/;
+const URLSPLITTER = /^((([^:\/]*:)?\/\/)?([^:\/]*)(\:([0-9]*))?)(\/.*)?$/;
 
 export default {URLSPLITTER};
