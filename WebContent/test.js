@@ -26,6 +26,7 @@ de.titus.request.interceptor.InterceptManager.addInterceptor("http://localhost:8
 		response : {
 			type: "authentication-header",
 			headerType: "Bearer",
+			valueType : "content"
 			valueSelector: "jwt"
 		}			
 	},
