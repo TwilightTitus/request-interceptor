@@ -1,4 +1,4 @@
-import InterceptManager from "./InterceptManager";
+import Manager from "./Manager";
 import Constants from "./Constants";
 
 if(typeof XMLHttpRequest !== "undefined"){	
@@ -24,6 +24,6 @@ if(typeof XMLHttpRequest !== "undefined"){
 	};
 	
 	 XMLHttpRequest.prototype.send = function(){		 
-		return InterceptManager.doIntercept(this.__interceptorRequestData, this, ORGSEND.bind(this, arguments));
+		return Manager.doIntercept(this.__interceptorRequestData, this, ORGSEND.bind(this, arguments));
 	};
 }

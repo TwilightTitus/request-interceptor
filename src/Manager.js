@@ -2,7 +2,6 @@ const Manager = {
 	
 	urlHandleMap: {},	
 	doIntercept : function(aData, aRequest, aCallback){
-		console.log("doIntercept (", arguments, ")");
 		let interceptor = this.urlHandleMap[aData.server];
 		let type = typeof interceptor;
 		if(type === "undefined")

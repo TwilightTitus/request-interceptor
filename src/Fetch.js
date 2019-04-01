@@ -1,10 +1,9 @@
-import InterceptManager from "./InterceptManager";
+import Manager from "./Manager";
 import Constants from "./Constants";
 
 if(typeof fetch === "function"){	
 	const ORGFETCH = fetch;
 	fetch = function(aUrl, aRequest){
-		console.log("arguments:", arguments);
 		let request = aRequest || {};
 		let match = Constants.URLSPLITTER.exec(aUrl);
 		let data = {
@@ -22,6 +21,6 @@ if(typeof fetch === "function"){
 			async : true
 		};
 		
-		return InterceptManager.doIntercept(data, request, ORGFETCH.bind(this, aUrl, request));
+		return Manager.doIntercept(data, request, ORGFETCH.bind(this, aUrl, request));
 	};
 }
