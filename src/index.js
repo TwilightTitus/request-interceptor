@@ -9,6 +9,7 @@ import Interceptors from "./interceptors";
 	Global.de.titus = Global.de.titus || {};
 	Global.de.titus.request = Global.de.titus.request || {};
 	Global.de.titus.request.interceptor = {
+		VERSION : "${version}",
 		Manager : Manager,
 		interceptors : Interceptors
 	};

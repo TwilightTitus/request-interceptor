@@ -1,6 +1,6 @@
 {
   "name": "de.titus.request.interceptor",
-  "version": "1.0.0-beta",
+  "version": "1.0.0-beta2",
   "description": "this helps you to intercept request at websites for oauth2 or token autentications or even what you need",
   "main": "./index.js",
   "scripts": {
@@ -8,11 +8,22 @@
     "dev-server": "webpack-dev-server --open --config webpack.dev-server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["request", "intercept", "sso", "jwt", "oauth", "json web token", "xhr", "XMLHttpRequest", "fetch"],
+  "keywords": [
+    "request",
+    "intercept",
+    "sso",
+    "jwt",
+    "oauth",
+    "json web token",
+    "xhr",
+    "XMLHttpRequest",
+    "fetch"
+  ],
   "author": "Frank Schüler",
   "license": "MIT",
   "devDependencies": {
     "clean-webpack-plugin": "^1.0.1",
+    "replace-in-file-webpack-plugin": "^1.0.6",
     "webpack": "^4.29.0",
     "webpack-cli": "^3.2.1",
     "webpack-dev-server": "^3.1.14",
