@@ -29,6 +29,8 @@ de.titus.request.interceptor.InterceptManager.addInterceptor("http://localhost:8
 			valueSelector: "jwt"
 		}			
 	},
-	refreshInterval: "always",
-	useXHR : false
+	refresh{
+		type:"login",
+		interval: "always",
+	}
 }));

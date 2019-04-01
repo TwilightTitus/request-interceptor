@@ -2,6 +2,7 @@ import JsonWebToken from "./JsonWebToken";
 
 const JWTInterceptor = function(aSetup){
 	this.setup = aSetup;
+	this.setup.refresh = this.setup.refresh || {interval : "always"}; 
 	this.jwt;
 	this.useFetch = typeof window.fetch === "function";
 };
@@ -15,7 +16,7 @@ JWTInterceptor.prototype.doHandle = function(aData, aRequest, aCallback){
 	let isXMLHttpRequest = aRequest instanceof XMLHttpRequest;
 	let appendJWT = JWTInterceptor.prototype[(isXMLHttpRequest ? "appendJwtXHR" : "appendJwt" )].bind(this, aRequest, aCallback);
 	
-	if(this.jwt && this.setup.refreshInterval !== "always")
+	if(this.jwt && this.setup.refesh.interval !== "always")
 		return appendJWT(this.jwt);
 	else
 		return this.__loadToken(appendJWT);
@@ -54,7 +55,7 @@ JWTInterceptor.prototype.__extractToken = function(aResponse){
 	this.jwt = new JsonWebToken(aResponse[this.setup.login.response.valueSelector]);
 	
 	if(this.setup.refreshInterval !== "always"){
-		let intervall = this.setup.refeshInterval || JWTInterceptor.DEFAULT.MIN_REFRESH_INTERVALL_TIME;
+		let intervall = this.setup.refesh.interval || JWTInterceptor.DEFAULT.MIN_REFRESH_INTERVALL_TIME;
 		if(typeof this.jwt.header.iat === "number" && typeof this.jwt.header.exp === "number"){
 			let diff = this.jwt.header.exp - this.jwt.header.iat;			
 			intervall = diff > 0 ? diff : this.jwt.header.exp;

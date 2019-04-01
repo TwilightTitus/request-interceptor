@@ -1,8 +1,6 @@
 import "./XMLHttpRequest";
 import "./Fetch";
 import Manager from "./InterceptManager";
-
-
 import Interceptors from "./interceptors";
 
 
