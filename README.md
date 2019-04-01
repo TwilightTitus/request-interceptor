@@ -30,6 +30,46 @@ RequestInterceptManager.addInterceptor("[service-b","service-b", "service-...", 
 		interval: 10000 // default refresh interval time in ms to refresh the token
 		//interval: "always" // this tells, that refresh the jwt at every request 
 	} 
-})); 
+}));
+```
 
 
+# Custom Interceptor
+### as simple function
+```javascript
+RequestInterceptManager.addInterceptor("[service-b","service-b", "service-...", function(aData, aRequest, aCallback){
+	// You need to check, if it is a XMLHttpRequest, because XMLHttpRequest an fetch working differently
+	let isXHR = aRequest instanceof XMLHttpRequest; 
+
+	if(isXHR)
+		aRequest.setRequestHeader("myHeader" , "my value");
+	else{
+		aRequest.headers = aRequest.headers || {}
+		aRequest.headers["myHeader"] = "my value";
+	} 
+});
+```
+
+### as simple as object 
+```javascript
+
+let MyInterceptor = function(){
+	this.lastCall;
+}; 
+
+MyInterceptor.prototype.onHandle = function(aData, aRequest, aCallback){
+	// You need to check, if it is a XMLHttpRequest, because XMLHttpRequest an fetch working differently
+	let isXHR = aRequest instanceof XMLHttpRequest; 
+
+	if(isXHR)
+		aRequest.setRequestHeader("myHeader" , "my value");
+	else{
+		aRequest.headers = aRequest.headers || {}
+		aRequest.headers["myHeader"] = "my value";
+	} 
+	
+	this.lastCall = Date.now();
+};
+
+RequestInterceptManager.addInterceptor("[service-b","service-b", "service-...", new MyInterceptor());
+```
