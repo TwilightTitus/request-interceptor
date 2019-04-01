@@ -6,6 +6,10 @@ The web site from service A with url https://service-a.com want to call an ajax 
 
 BUT, if you don't know all the services, because you have an web portal or something else, or you have an high number of services to include, then you can do the authentication with this libs, very easily.
     
+# How to include
+### at HTML page
+
+### With NPM
 
 
 # Sample for JWT
@@ -27,3 +31,5 @@ RequestInterceptManager.addInterceptor("[service-b","service-b", "service-...", 
 		//interval: "always" // this tells, that refresh the jwt at every request 
 	} 
 })); 
+
+
