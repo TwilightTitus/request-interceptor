@@ -1,9 +1,9 @@
-// Load all polyfills
 import "./XMLHttpRequest";
 import "./Fetch";
+import Manager from "./InterceptManager";
 
-import InterceptManager from "./InterceptManager";
-import JWTInterceptor from "./interceptors/JWTInterceptor";
+
+import Interceptors from "./interceptors";
 
 
 (function(Global){	
@@ -11,9 +11,9 @@ import JWTInterceptor from "./interceptors/JWTInterceptor";
 	Global.de.titus = Global.de.titus || {};
 	Global.de.titus.request = Global.de.titus.request || {};
 	Global.de.titus.request.interceptor = {
-		InterceptManager : InterceptManager,
-		JWTInterceptor : JWTInterceptor
+		Manager : Manager,
+		interceptors : Interceptors
 	};
 	
-	
+	Global.RequestInterceptManager = Manager;
 })(window|| global || {});

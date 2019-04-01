@@ -1,4 +1,4 @@
-const InterceptManager = window.InterceptManager = {	
+const Manager = {	
 	
 	urlHandleMap: {},	
 	doIntercept : function(aData, aRequest, aCallback){
@@ -13,14 +13,17 @@ const InterceptManager = window.InterceptManager = {
 			return interceptor.doHandle(aData, aRequest, aCallback);		
 	},
 	addInterceptor : function(aUrl, aInterceptor){		
-		if(typeof this.urlHandleMap[aUrl] !== "undefined")
-			throw new Error("A Handle for URL \"" + aUrl + "\" is defined!");			
-		this.urlHandleMap[aUrl] = aInterceptor;		
+		if(arguments.length < 2)
+			throw new Error("function required a url and an interceptor");	
+		
+		let interceptor = arguments[arguments.length - 1];
+		for(let i = 0; i < (arguments.length - 1); i++)		
+			this.urlHandleMap[arguments[i]] = interceptor;		
 	},
 	removeInterceptor : function(aUrl){
 		delete this.urlHandleMap[aUrl];
 	}
 };
-export default InterceptManager; 
+export default Manager; 
 
 
