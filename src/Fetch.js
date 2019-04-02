@@ -22,7 +22,7 @@ import Constants from "./Constants";
 				async : true
 			};
 			
-			return Manager.doIntercept(data, request, ORGFETCH.bind(this, aUrl, request));
+			return new Promise(Manager.doIntercept.bind(Manager, data, request, ORGFETCH.bind(this, aUrl, request)));
 		};
 	};
 })(window || global || {});

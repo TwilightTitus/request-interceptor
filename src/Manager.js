@@ -10,6 +10,7 @@ const chaining = function(aChain, aData, aRequest, aCallback){
 const Manager = {	
 	interceptors : [],
 	doIntercept : function(aData, aRequest, aCallback){
+		console.log(arguments);
 		let chain = [];
 		this.interceptors.forEach((function(aData, aInterceptor){
 			if(aInterceptor.doAccept(aData))
