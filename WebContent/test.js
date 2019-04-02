@@ -8,29 +8,31 @@ document.querySelector("#send-xhr-request").addEventListener("click", function()
 	xhttp.send();
 });
 
-document.querySelector("#send-fetch-request").addEventListener("click", function() {	
+document.querySelector("#send-fetch-request").addEventListener("click", function() {
 	fetch("http://localhost:8080/api/auth/login", {
 		headers : {
 			'Content-Type' : 'application/json'
 		}
-	}).then(function(aResponse){
+	}).then(function(aResponse) {
 		console.log("fetch request ready!", arguments);
 	});
 });
 
-RequestInterceptManager.addInterceptor("http://localhost:8080","http://localhost:8081", "http://localhost:8082", new de.titus.request.interceptor.interceptors.JWTInterceptor({
-	login : {
-		url : "http://localhost/jwt.json",
-		method: "GET",
-		response : {
-			type: "authentication-header",
-			headerType: "Bearer",
-			valueType : "content",
-			valueSelector: "jwt"
-		}			
-	},
-	refresh : {
-		type:"login",
-		interval: "always",
-	}
-}));
+RequestInterceptManager.addInterceptor(new de.titus.request.interceptor.interceptors.JWTInterceptor({
+    	condition: [ "http://localhost:8080", "http://localhost:8081", "http://localhost:8082" ],
+        login : {
+            url : "http://localhost/jwt.json",
+            method : "GET",
+            response : {
+                type : "authentication-header",
+                headerType : "Bearer",
+                valueType : "content",
+                valueSelector : "jwt"
+            }
+        },
+        refresh : {
+            type : "login",
+            interval : "always",
+        }
+    })
+);

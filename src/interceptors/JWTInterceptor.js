@@ -12,6 +12,20 @@ JWTInterceptor.DEFAULT = {
 	MIN_REFRESH_INTERVALL_TIME : 10 * 60 * 1000
 };
 
+JWTInterceptor.prototype.doAccept = function(aData){
+	let type = typeof this.setup.condition; 
+	if(type === "function")
+		return  this.setup.condition(aData);
+	else if(type === "string")
+		return this.setup.condition == aData.server;
+	else if(this.setup.condition instanceof Array){
+		for(let i = 0; i < this.setup.condition.length; i++)
+			if(this.setup.condition[i] == aData.server)
+				return true;
+	}	
+	return false;			
+};
+
 JWTInterceptor.prototype.doHandle = function(aData, aRequest, aCallback){	
 	let isXMLHttpRequest = aRequest instanceof XMLHttpRequest;
 	let appendJWT = JWTInterceptor.prototype[(isXMLHttpRequest ? "appendJwtXHR" : "appendJwt" )].bind(this, aRequest, aCallback);
@@ -19,20 +33,18 @@ JWTInterceptor.prototype.doHandle = function(aData, aRequest, aCallback){
 	if(this.jwt && this.setup.refresh.interval !== "always")
 		return appendJWT(this.jwt);
 	else
-		return this.__loadToken(appendJWT);
+		this.__loadToken(aCallback);
 };
-
 JWTInterceptor.prototype.__loadToken = function(aCallback){
 	if(this.useFetch)
 		return this.__loadTokenFetch(aCallback);	
 	return this.__loadTokenByXHR(aCallback);
 };
 
-JWTInterceptor.prototype.__loadTokenFetch = function(aCallback){
+JWTInterceptor.prototype.__loadTokenFetch = function(aCallback){	
 	return fetch(this.setup.login.url, {
 		method: this.setup.login.method || "get"
-	})
-	.then(function(aResponse){return aResponse.json();})
+	}).then(function(aResponse){return aResponse.json();})
 	.then(JWTInterceptor.prototype.__extractToken.bind(this))
 	.then(aCallback ? aCallback : function(){});
 };

@@ -1,26 +1,32 @@
-const Manager = {	
+const chaining = function(aChain, aData, aRequest, aCallback){
+	if(aChain.length == 0)
+		return aCallback();
 	
-	urlHandleMap: {},	
+	let interceptor = aChain.shift();
+	interceptor.doHandle(aData, aRequest, chaining.bind(null, aChain, aData, aRequest, aCallback));
+};
+
+
+const Manager = {	
+	interceptors : [],
 	doIntercept : function(aData, aRequest, aCallback){
-		let interceptor = this.urlHandleMap[aData.server];
-		let type = typeof interceptor;
-		if(type === "undefined")
-			return aCallback();
-		else if(type === "function")
-			return interceptor(aData, aRequest, aCallback);
-		else if(type === "object")
-			return interceptor.doHandle(aData, aRequest, aCallback);		
-	},
-	addInterceptor : function(aUrl, aInterceptor){		
-		if(arguments.length < 2)
-			throw new Error("function required a url and an interceptor");	
+		let chain = [];
+		this.interceptors.forEach((function(aData, aInterceptor){
+			if(aInterceptor.doAccept(aData))
+				this.push(aInterceptor);
+		}).bind(chain, aData));
 		
-		let interceptor = arguments[arguments.length - 1];
-		for(let i = 0; i < (arguments.length - 1); i++)		
-			this.urlHandleMap[arguments[i]] = interceptor;		
+		chaining(chain, aData, aRequest, aCallback);
 	},
-	removeInterceptor : function(aUrl){
-		delete this.urlHandleMap[aUrl];
+	addInterceptor : function(aInterceptor){		
+		if(!arguments.length != 1 && typeof aInterceptor !== "object")
+			throw new Error("function required an interceptor");
+		if(typeof aInterceptor.doAccept !== "function")
+			throw new Error("The interceptor required a \"doAccept\" function!");
+		if(typeof aInterceptor.doHandle !== "function")
+			throw new Error("The interceptor required a \"doHandle\" function!");
+		
+		return this.interceptors.push(aInterceptor);
 	}
 };
 export default Manager; 
