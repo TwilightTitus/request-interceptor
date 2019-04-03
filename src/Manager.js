@@ -1,3 +1,4 @@
+const CACHE = {};
 const chaining = function(aChain, aData, aRequest, aCallback){
 	if(aChain.length == 0)
 		return aCallback();
@@ -5,8 +6,6 @@ const chaining = function(aChain, aData, aRequest, aCallback){
 	let interceptor = aChain.shift();
 	interceptor.doHandle(aData, aRequest, chaining.bind(null, aChain, aData, aRequest, aCallback));
 };
-
-const CACHE = {};
 
 const Manager = {	
 	interceptors : [],
@@ -25,7 +24,7 @@ const Manager = {
 		chaining(chain, aData, aRequest, aCallback);
 	},
 	addInterceptor : function(aInterceptor){		
-		if(!arguments.length != 1 && typeof aInterceptor !== "object")
+		if(arguments.length != 1 && typeof aInterceptor !== "object")
 			throw new Error("function required an interceptor");
 		if(typeof aInterceptor.doAccept !== "function")
 			throw new Error("The interceptor required a \"doAccept\" function!");

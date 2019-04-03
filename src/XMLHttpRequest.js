@@ -1,5 +1,7 @@
+
 import Manager from "./Manager";
 import Constants from "./Constants";
+
 
 if(typeof XMLHttpRequest !== "undefined"){	
 	const ORGOPEN = XMLHttpRequest.prototype.open;
