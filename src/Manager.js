@@ -6,12 +6,17 @@ const chaining = function(aChain, aData, aRequest, aCallback){
 	interceptor.doHandle(aData, aRequest, chaining.bind(null, aChain, aData, aRequest, aCallback));
 };
 
+const CACHE = {};
 
 const Manager = {	
 	interceptors : [],
-	doIntercept : function(aData, aRequest, aCallback){
-		console.log(arguments);
-		let chain = [];
+	doIntercept : function(aData, aRequest, aCallback){		
+		let chain = CACHE[aData.server];
+		if(typeof chain === "undefined"){
+			chain = [];
+			CACHE[aData.server] = chain;
+		}
+		
 		this.interceptors.forEach((function(aData, aInterceptor){
 			if(aInterceptor.doAccept(aData))
 				this.push(aInterceptor);
