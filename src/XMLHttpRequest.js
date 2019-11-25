@@ -21,10 +21,11 @@ if(typeof XMLHttpRequest !== "undefined"){
 			query: match[7],
 			async : typeof arguments[2] === "boolean" ? arguments[2] : true
 		};
-		ORGOPEN.apply(this, arguments);	
+		return ORGOPEN.apply(this, arguments);	
 	};
 	
-	 XMLHttpRequest.prototype.send = function(){		 
+	 XMLHttpRequest.prototype.send = function(){
+		debugger;
 		Manager.doIntercept(this.__interceptorRequestData, this)
 		.then(function(){
 			return  ORGSEND.bind(this, arguments);

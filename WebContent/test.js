@@ -5,7 +5,7 @@ document.querySelector("#send-xhr-request").addEventListener("click", function()
 		if (xhttp.readyState == 4)
 			console.log("xhr request ready!", this);
 	};
-	xhttp.open("GET", "http://localhost:8080/api/auth/login", true);
+	xhttp.open("GET", "http://test.de/api/auth/login", true);
 	xhttp.send();
 });
 
@@ -21,7 +21,7 @@ document.querySelector("#send-fetch-request").addEventListener("click", function
 });
 
 RequestInterceptManager.addInterceptor(new de.titus.request.interceptor.interceptors.OAuthInterceptor({
-    	condition: [ "http://localhost:8080", "http://localhost:8081", "http://localhost:8082" ],
+    	condition: [ "http://test.de", "http://localhost:8080", "http://localhost:8081", "http://localhost:8082" ],
         login : {
             url : "http://localhost/jwt.json",
             method : "GET",

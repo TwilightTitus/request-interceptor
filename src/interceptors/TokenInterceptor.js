@@ -25,7 +25,7 @@ const TokenInterceptor = function(aSetup){
 				resolve(false);
 			});	
 		},
-		doHandle : function(aData, aRequest){	
+		doHandle : function(aData, aRequest){
 			let isXMLHttpRequest = aRequest instanceof XMLHttpRequest;	
 			let appendFunction = isXMLHttpRequest ? setup.appendJwtOnXhr : setup.appendJwtOnFetch;
 				
