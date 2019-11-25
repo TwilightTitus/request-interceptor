@@ -1,10 +1,10 @@
-import JsonWebToken from "./JsonWebToken";
-import JWTInterceptor from "./JWTInterceptor";
+import OAuthInterceptor from "./OAuthInterceptor";
+import TokenInterceptor from "./TokenInterceptor";
 
 
 const Data = {
-	JsonWebToken : JsonWebToken,
-	JWTInterceptor : JWTInterceptor
+	OAuthInterceptor : OAuthInterceptor,
+	TokenInterceptor : TokenInterceptor
 };
 
 export default Data;

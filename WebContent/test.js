@@ -1,4 +1,5 @@
 document.querySelector("#send-xhr-request").addEventListener("click", function() {
+	console.log("send-xhr-request");
 	let xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
 		if (xhttp.readyState == 4)
@@ -9,6 +10,7 @@ document.querySelector("#send-xhr-request").addEventListener("click", function()
 });
 
 document.querySelector("#send-fetch-request").addEventListener("click", function() {
+	console.log("send-fetch-request");
 	fetch("http://localhost:8080/api/auth/login", {
 		headers : {
 			'Content-Type' : 'application/json'
@@ -18,7 +20,7 @@ document.querySelector("#send-fetch-request").addEventListener("click", function
 	});
 });
 
-RequestInterceptManager.addInterceptor(new de.titus.request.interceptor.interceptors.JWTInterceptor({
+RequestInterceptManager.addInterceptor(new de.titus.request.interceptor.interceptors.OAuthInterceptor({
     	condition: [ "http://localhost:8080", "http://localhost:8081", "http://localhost:8082" ],
         login : {
             url : "http://localhost/jwt.json",
@@ -30,9 +32,6 @@ RequestInterceptManager.addInterceptor(new de.titus.request.interceptor.intercep
                 valueSelector : "jwt"
             }
         },
-        refresh : {
-            type : "login",
-            interval : "always",
-        }
+        refreshInterval : 10 * 60 * 1000
     })
 );
