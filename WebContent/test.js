@@ -3,20 +3,22 @@ document.querySelector("#send-xhr-request").addEventListener("click", function()
 	let xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
 		if (xhttp.readyState == 4)
-			console.log("xhr request ready!", this);
+			console.log("xhr request ready!", JSON.parse(this.response));
 	};
-	xhttp.open("GET", "http://localhost:8080/api/auth/login", true);
+	xhttp.open("GET", "http://localhost:8080/response.json", true);
 	xhttp.send();
 });
 
 document.querySelector("#send-fetch-request").addEventListener("click", function() {
 	console.log("send-fetch-request");
-	fetch("http://localhost:8080/api/auth/login", {
+	fetch("http://localhost:8080/response.json", {
 		headers : {
 			'Content-Type' : 'application/json'
 		}
+	}).then(function(aResponse){
+		return aResponse.json();
 	}).then(function(aResponse) {
-		console.log("fetch request ready!", arguments);
+		console.log("fetch request ready!", aResponse);
 	})["catch"](console.error);
 });
 
