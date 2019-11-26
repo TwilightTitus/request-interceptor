@@ -5,18 +5,18 @@ import Constants from "./Constants";
 if(typeof XMLHttpRequest !== "undefined"){	
 	const ORGOPEN = XMLHttpRequest.prototype.open;
 	const ORGSEND = XMLHttpRequest.prototype.send;
-	XMLHttpRequest.prototype.open = function(){		
+	XMLHttpRequest.prototype.open = function(){
 		let match = Constants.URLSPLITTER.exec(arguments[1]);
 		this.__interceptorRequestData = {
 			method : arguments[0],
 			url : arguments[1],
-			server: match[1],
+			origin: match[1] || document.location.origin,
 			protocol : (function(match){
 				if(typeof match[2] === "undefined" || match[3] == "//")
 					return document.location.protocol || "http:";
 				else return match[3];			
 			}).call(null, match),
-			hostname: match[4] ||document.location.hostname,
+			hostname: match[4] || document.location.hostname,
 			port: match[6],
 			query: match[7],
 			async : typeof arguments[2] === "boolean" ? arguments[2] : true
@@ -25,11 +25,18 @@ if(typeof XMLHttpRequest !== "undefined"){
 	};
 	
 	 XMLHttpRequest.prototype.send = function(){
-		debugger;
+		let send = (function(args){
+			return ORGSEND.apply(this, args);
+		}).bind(this, arguments);
 		Manager.doIntercept(this.__interceptorRequestData, this)
-		.then(function(){
-			return  ORGSEND.bind(this, arguments);
-		})["catch"](function(error){throw error});
+		.then(function(aData, aRequest){
+			try{
+				console.log("org request");
+				return send();
+			}catch (e) {
+				throw e;
+			}
+		})["catch"](console.error);
 		
 		return this;
 	};
