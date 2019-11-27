@@ -42,6 +42,6 @@ if(typeof XMLHttpRequest !== "undefined"){
             return this;
 	    }
 	    console.warn("request interceptor don't support syncronized requests");
-	    return ORGSEND.apply(this, args);
+	    return ORGSEND.apply(this, arguments);
 	};
 }
