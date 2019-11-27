@@ -24,20 +24,24 @@ if(typeof XMLHttpRequest !== "undefined"){
 		return ORGOPEN.apply(this, arguments);	
 	};
 	
-	 XMLHttpRequest.prototype.send = function(){
-		let send = (function(args){
-			return ORGSEND.apply(this, args);
-		}).bind(this, arguments);
-		Manager.doIntercept(this.__interceptorRequestData, this)
-		.then(function(aData, aRequest){
-			try{
-				console.log("org request");
-				return send();
-			}catch (e) {
-				throw e;
-			}
-		})["catch"](console.error);
-		
-		return this;
+	XMLHttpRequest.prototype.send = function(){
+	    if(this.__interceptorRequestData.asyc){
+    		let send = (function(args){
+    			return ORGSEND.apply(this, args);
+    		}).bind(this, arguments);
+    		Manager.doIntercept(this.__interceptorRequestData, this)
+    		.then(function(aData, aRequest){
+    			try{
+    				console.log("org request");
+    				return send();
+    			}catch (e) {
+    				throw e;
+    			}
+    		})["catch"](console.error);
+
+            return this;
+	    }
+	    console.warn("request interceptor don't support syncronized requests");
+	    return send();
 	};
 }
