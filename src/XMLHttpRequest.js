@@ -25,14 +25,13 @@ if(typeof XMLHttpRequest !== "undefined"){
 	};
 	
 	XMLHttpRequest.prototype.send = function(){        
-	    if(this.__interceptorRequestData.asyc){
+	    if(this.__interceptorRequestData.async){
 	        let send = (function(args){
 	            return ORGSEND.apply(this, args);
 	        }).bind(this, arguments);
     		Manager.doIntercept(this.__interceptorRequestData, this)
     		.then(function(aData, aRequest){
     			try{
-    				console.log("org request");
     				return send();
     			}catch (e) {
     				throw e;
@@ -41,7 +40,7 @@ if(typeof XMLHttpRequest !== "undefined"){
 
             return this;
 	    }
-	    console.warn("request interceptor don't support syncronized requests");
+	    console.warn(new Error("request interceptor don't support syncronized requests"));
 	    return ORGSEND.apply(this, arguments);
 	};
 }
