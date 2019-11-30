@@ -39,9 +39,9 @@ const Manager = {
 	},
 	interceptors : [],
 	doIntercept : function(aData, aRequest){
-		if(Manager.ignoreDocumentOrigin && aData.origin == document.location.origin)
+		if(Manager.config.ignoreDocumentOrigin && aData.origin == document.location.origin)
 			return Promise.resolve(aData, aRequest);
-		if(typeof ignoreOrigins !== "undefined" && isOriginIgnored(aData, Manager.ignoreOrigins))
+		if(typeof Manager.config.ignoreOrigins !== "undefined" && isOriginIgnored(aData, Manager.config.ignoreOrigins))
 			return Promise.resolve(aData, aRequest);
 		
 		return getChain(aData, aRequest)
