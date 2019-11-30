@@ -32,7 +32,7 @@ const TokenInterceptor = function(aSetup){
 			if(typeof token !== "undefined")
 				return Promise.resolve(appendOn(aRequest, token));
 			else
-				return Promise.resolve(setup.fetchToken())
+				return Promise.resolve(setup.fetchToken(aData))
 				.then(function(aToken){
 					token = aToken;
 					return Promise.resolve(appendOn(aRequest, token));
