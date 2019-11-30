@@ -1,12 +1,26 @@
 const TokenInterceptor = function(aSetup){
 	const setup = aSetup; 
 	let token = undefined;
-	setInterval(function(){
-		new Promise(setup.fetchToken)
-		.then(function(aToken){
-			token = aToken;
-		});	
-	}, setup.refreshInterval || (60 * 1000));
+	
+	const defaultRefreshToken = function(){
+        new Promise(setup.fetchToken)
+        .then(function(aToken){
+            token = aToken;
+        }); 
+    };
+	
+	if(setup.refreshInterval > 0){
+	    const refreshToken = defaultRefreshToken
+	    if(typeof setup.refreshToken === "function"){
+	        refreshToken = function(){
+	            Promise.resolve(setup.refreshToken())
+	            .then(function(aToken){
+	                token = aToken;
+	            }); 
+	        };
+	    }
+	    setInterval(refreshToken, setup.refreshInterval || (60 * 1000))
+	}
 	
 	
 	return {
