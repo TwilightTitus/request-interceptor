@@ -24,32 +24,30 @@ const TokenInterceptor = function(aSetup){
 	
 	
 	return {
-		doAccept : setup.doAccept || function(aData){
-			return new Promise(function(resolve){
-				let type = typeof setup.condition; 
-				if(type === "function")
-					resolve(setup.condition(aData));
-				else if(type === "string")
-					resolve(setup.condition == aData.origin);
-				else if(setup.condition instanceof Array){
-					for(let i = 0; i < setup.condition.length; i++)
-						if(setup.condition[i] == aData.origin)
-							resolve(true);
-				}	
-				resolve(false);
-			});	
+		doAccept : setup.doAccept || function(aData){			
+			let type = typeof setup.condition; 
+			if(type === "function")
+				return Promise.resolve(setup.condition(aData));
+			else if(type === "string")
+				return Promise.resolve(setup.condition == aData.metadata.origin);
+			else if(setup.condition instanceof Array){
+				for(let i = 0; i < setup.condition.length; i++)
+					if(setup.condition[i] == aData.metadata.origin)
+						return Promise.resolve(true);
+			}	
+			return Promise.resolve(false);				
 		},
-		doHandle : function(aData, aRequest){
-			let isXMLHttpRequest = aRequest instanceof XMLHttpRequest;	
+		doHandle : function(aData){
+			let isXMLHttpRequest = aData.request instanceof XMLHttpRequest;	
 			let appendOn = isXMLHttpRequest ? setup.appendOnXhr : setup.appendOnFetch;
 				
 			if(typeof token !== "undefined")
-				return Promise.resolve(appendOn(aRequest, token));
+				return Promise.resolve(appendOn(aData, token));
 			else
 				return Promise.resolve(setup.fetchToken(aData))
 				.then(function(aToken){
 					token = aToken;
-					return Promise.resolve(appendOn(aRequest, token));
+					return Promise.resolve(appendOn(aData, token));
 				})["catch"](function(error){throw error});
 		}		
 	};
