@@ -37,19 +37,27 @@ const TokenInterceptor = function(aSetup){
 			}	
 			return Promise.resolve(false);				
 		},
-		doHandle : function(aData){
-			let isXMLHttpRequest = aData.request instanceof XMLHttpRequest;	
-			let appendOn = isXMLHttpRequest ? setup.appendOnXhr : setup.appendOnFetch;
-				
+		doHandle : function(aData){				
 			if(typeof token !== "undefined")
 				return Promise.resolve(appendOn(aData, token));
 			else
 				return Promise.resolve(setup.fetchToken(aData))
 				.then(function(aToken){
 					token = aToken;
-					return Promise.resolve(appendOn(aData, token));
+					if(setup.appendToken instanceof Array){
+						let promise = Promise.resolve(aData);
+						setup.appendToken.forEach(function(appender){
+							promise.then(function(aData){
+								return Promise.resolve(appender(aData, token));
+							});
+						});
+						return promise;
+					}
+					else
+						return Promise.resolve(setup.appendToken(aData, token));
 				})["catch"](function(error){throw error});
 		}		
 	};
 };
+
 export default TokenInterceptor;

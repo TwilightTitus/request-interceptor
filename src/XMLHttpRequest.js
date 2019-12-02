@@ -18,9 +18,7 @@ import Constants from "./Constants";
 		let data = undefined; 
 		
 		this.setRequestHeader = function(aName, aValue){
-			if(typeof data.request.headers === "undefined")
-				data.request.headers = {};
-			
+			data.request.headers = data.request.headers || {};			
 			data.request.headers[aName] = aValue;
 		};
 		

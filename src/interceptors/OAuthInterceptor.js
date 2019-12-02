@@ -1,17 +1,5 @@
 import TokenInterceptor from "./TokenInterceptor"
 
-
-const appendOnFetch = function(aData, aToken){
-	aData.request.headers = aData.request.headers || {};
-	aData.request.headers["Authorization"] = "Bearer " + aToken;
-	return aData;
-};
-
-const appendOnXhr = function(aData, aToken){
-	aData.request.setRequestHeader("Authorization" , "Bearer " + aToken);
-	return aData;
-};
-
 const OAuthInterceptor = function(aSetup){
 	let setup = aSetup;
 	setup.fetchToken = function(){
@@ -23,8 +11,11 @@ const OAuthInterceptor = function(aSetup){
 			return aResponse[setup.login.response.valueSelector];
 		})["catch"](function(error){throw error;});		
 	};
-	setup.appendOnFetch = appendOnFetch;
-	setup.appendOnXhr = appendOnXhr;
+	setup.appendToken = function(aData, aToken){
+		aData.request.headers = aData.request.headers || {};
+		aData.request.headers["Authorization"] = "Bearer " + aToken;
+		return aData;
+	};
 	return TokenInterceptor(aSetup);
 };
 
