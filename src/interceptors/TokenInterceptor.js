@@ -1,3 +1,34 @@
+/**
+ * aSetup  => 
+ * {
+ * 	condition : [string | string[] | function(aData}],
+ * 	fetchToken : function(),
+ *  appendToken : function(aToken, aData),
+ *  (optional) refreshInterval,
+ *  (optional) refreshToken : function()
+ * } 
+ * 
+ * aData => 
+ * {
+ * 	url : String,
+ * 	request : {
+ * 		method : string,
+ * 		(optional) headers : {
+ * 			[header name : string] : [header value : string],
+ * 			... 
+ * 		},
+ * 		(optional) body : {string | object | FormData | ...] 
+ * 	},
+ * 	metadata : {
+ * 		method : string,
+ * 		origin : string,
+ * 		hostname : string,
+ * 		protocol : string,
+ * 		(optional) port : number,
+ * 		query : string,
+ * 	} 
+ * }
+ */
 const TokenInterceptor = function(aSetup){
 	const setup = aSetup; 
 	let token = undefined;
@@ -7,6 +38,20 @@ const TokenInterceptor = function(aSetup){
         .then(function(aToken){
             token = aToken;
         }); 
+    };
+    
+    const callAppendToken = function(aToken, aData, theAppender){
+    	if(theAppender instanceof Array){
+			let promise = Promise.resolve(aData);
+			theAppender.forEach(function(appender){
+				promise.then(function(aData){
+					return Promise.resolve(appender(token, aData));
+				});
+			});
+			return promise;
+		}
+		else
+			return Promise.resolve(theAppender(token, aData));
     };
 	
 	if(setup.refreshInterval > 0){
@@ -39,22 +84,12 @@ const TokenInterceptor = function(aSetup){
 		},
 		doHandle : function(aData){				
 			if(typeof token !== "undefined")
-				return Promise.resolve(appendOn(aData, token));
+				return callAppendToken(token, aData, setup.appendToken);
 			else
-				return Promise.resolve(setup.fetchToken(aData))
+				return Promise.resolve(setup.fetchToken())
 				.then(function(aToken){
 					token = aToken;
-					if(setup.appendToken instanceof Array){
-						let promise = Promise.resolve(aData);
-						setup.appendToken.forEach(function(appender){
-							promise.then(function(aData){
-								return Promise.resolve(appender(aData, token));
-							});
-						});
-						return promise;
-					}
-					else
-						return Promise.resolve(setup.appendToken(aData, token));
+					return callAppendToken(token, aData, setup.appendToken);
 				})["catch"](function(error){throw error});
 		}		
 	};

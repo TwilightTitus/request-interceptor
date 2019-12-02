@@ -11,7 +11,7 @@ const OAuthInterceptor = function(aSetup){
 			return aResponse[setup.login.response.valueSelector];
 		})["catch"](function(error){throw error;});		
 	};
-	setup.appendToken = function(aData, aToken){
+	setup.appendToken = function(aToken, aData){
 		aData.request.headers = aData.request.headers || {};
 		aData.request.headers["Authorization"] = "Bearer " + aToken;
 		return aData;
