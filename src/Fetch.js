@@ -5,14 +5,13 @@ import Constants from "./Constants";
 	if(typeof Global.fetch !== "function")
 		return;	
 	const ORGFETCH = Global.fetch;
-	Global.fetch = function(aUrl, aRequest){		
-		let request = aRequest || {};
+	Global.fetch = function(aUrl, aRequest){
 		let match = Constants.URLSPLITTER.exec(aUrl);
 		let data = {
 			url : aUrl,
-			request : aRequest,
+			request : aRequest || {},
 			metadata : {					
-				method : request.method || "GET",
+				method : typeof aRequest === "undefined" ? "GET" : (aRequest.method || "GET"),
 				origin: match[1] || document.location.origin,
 				protocol : (function(match){
 					if(typeof match[2] === "undefined" || match[3] == "//")

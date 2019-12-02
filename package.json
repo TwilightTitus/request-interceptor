@@ -1,6 +1,6 @@
 {
   "name": "de.titus.request.interceptor",
-  "version": "1.0.0-beta3",
+  "version": "1.0.0-beta4",
   "description": "this helps you to intercept request at websites for oauth2 or token autentications or even what you need",
   "main": "./index.js",
   "scripts": {
